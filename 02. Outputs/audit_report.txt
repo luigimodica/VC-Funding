@@ -1,0 +1,48 @@
+
+==============================================================
+FORGE GLOBAL VC DATASET — DATA AUDIT REPORT
+==============================================================
+
+DIMENSIONI
+  Companies  : 5370 aziende  ×  8 colonne
+  Rounds     : 21538 righe   × 17 colonne
+  Join key   : URL (copertura 100%, nessun orfano)
+
+QUALITÀ COMPANIES
+  ✅✅ URL, Company, Sector, Subsector : 100% presenti
+  ✅✅ Founded                         : 99.9% (3 missing, 3 con 1900 come placeholder)
+  ✅✅ Headquarters                    : 99.5% (27 missing)
+  ⚠️  Investors                       : 52.8% presenti
+  ❌  Total Funding                    : 0% — da ricalcolare dai rounds
+  ⚠️  Company names                    : contengono rumore HTML tipo
+                                        "Invest and Sell X Stock - Forge" → estrarre X
+
+QUALITÀ ROUNDS
+  ✅✅ URL                             : 100%
+  ⚠️  Righe senza dati (placeholder)  : 2282 / 21538 = 10.6%
+                                        (aziende senza round dettagliati su Forge)
+  ✅✅ Round con dati reali            : 19256
+  ✅✅ Funding Date                    : 100% parseable MM/DD/YYYY
+  ✅  Amount Raised                   : 99.9% parseable ($MM/$B)
+  ✅✅ Post-Money Valuation            : 100% parseable
+  ⚠️  Key Investors                   : 89.4% presenti nei round reali
+
+ANOMALIE DA GESTIRE
+  1. Company name: stripping del template HTML Forge
+  2. Founded = 1900: trattare come NaN (placeholder scraping)
+  3. Amount Raised = '--': trattare come NaN
+  4. Sector/Subsector = 'Missing': trattare come NaN
+  5. Total Funding: derivare da sum(Amount Raised) per azienda
+  6. Shares Outstanding = '1': possibile errore, da escludere in analisi specifiche
+
+ANALISI AFFIDABILI CON QUESTI DATI
+  ✅ Distribuzione per settore e subsettore
+  ✅ Analisi round (tipo, importi, valutazioni, timing)
+  ✅ Analisi temporale (anno fondazione, anno round)
+  ✅ Analisi geografica (paese, stato USA)
+  ✅ Network investitori (limitato al 52% aziende)
+  ✅ Termini preferenziali (liquidation pref, partecipazione)
+  ⚠️ Totale funding per azienda (derivato, non nativo)
+  ❌ Analisi di sopravvivenza/successo (survivorship bias)
+
+==============================================================
